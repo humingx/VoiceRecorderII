@@ -1,7 +1,9 @@
 package com.example.l.immersiondemo;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -150,16 +152,14 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
                                 dele_record_file();
                                break;
                             case 2:
-
                                 //realize share method here
-                                Toast.makeText(PlayingList.this,"realize share method",Toast.LENGTH_SHORT).show();
-
-
+                               share_record_file();
                                 break;
                             case 3:
-
                                 rename_record_file();
-                                //rename
+                                break;
+                            case 4:
+//                                to_word_file();
                                 break;
                         }
                         return true;
@@ -171,6 +171,8 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
 
 
     }
+
+
 
     private void refreshListView() {
 
@@ -241,11 +243,16 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
                 }
             }
         });
-
-
     }
 
-
+    private void share_record_file() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        Uri uri = Uri.fromFile(file);
+        shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+        shareIntent.setType("audio/*");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(shareIntent, "分享到："));
+    }
     private void rename_record_file() {
 
         AlertDialog.Builder  builder = new AlertDialog.Builder(this);
@@ -315,9 +322,6 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
         playing_music_end_txt.setText(get_voice_record_class.getRecordingTime());
 
         playing_image_btn.setOnClickListener(this);
-
-
-
     }
 
     private void Init() {
@@ -330,7 +334,7 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
 
         popupMenu.setMenuItems(Arrays.asList(
                 new OptionMenu("playing"), new OptionMenu("delete"),
-                new OptionMenu("share"), new OptionMenu("rename")));
+                new OptionMenu("share"), new OptionMenu("rename"),new OptionMenu("toword")));
     }
 
     @Override
@@ -362,7 +366,6 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
         }
 
         else {
-
             thread_state_isinterrupt = true;
             mediaPlayer.pause();
             playing_image_btn.setImageResource(R.drawable.start);
