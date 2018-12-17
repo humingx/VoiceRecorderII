@@ -158,9 +158,6 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
                             case 3:
                                 rename_record_file();
                                 break;
-                            case 4:
-//                                to_word_file();
-                                break;
                         }
                         return true;
                     }
@@ -246,8 +243,9 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
     }
 
     private void share_record_file() {
+        File fl=new File(file.getAbsolutePath()+"/"+list.get(remPosition).getFileName());
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        Uri uri = Uri.fromFile(file);
+        Uri uri = Uri.fromFile(fl);
         shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
         shareIntent.setType("audio/*");
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -334,7 +332,7 @@ public class PlayingList extends AppCompatActivity implements  View.OnClickListe
 
         popupMenu.setMenuItems(Arrays.asList(
                 new OptionMenu("playing"), new OptionMenu("delete"),
-                new OptionMenu("share"), new OptionMenu("rename"),new OptionMenu("toword")));
+                new OptionMenu("share"), new OptionMenu("rename")));
     }
 
     @Override
